@@ -20,13 +20,10 @@ function App() {
   return (
     <>
       <ChakraProvider>
-        <Nav />
-        <Hero />
         <Container maxW="1200px">
           <Header data={data} isLoading={isLoading} error={error} />
           <MainTable data={data} isLoading={isLoading} error={error} />
         </Container>
-        <Footer />
       </ChakraProvider>
     </>
   );

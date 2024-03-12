@@ -1,0 +1,89 @@
+{
+  "hash": "c146aad2",
+  "browserHash": "b548e164",
+  "optimized": {
+    "react": {
+      "src": "../../node_modules/react/index.js",
+      "file": "react.js",
+      "fileHash": "60812d6e",
+      "needsInterop": true
+    },
+    "react-dom": {
+      "src": "../../node_modules/react-dom/index.js",
+      "file": "react-dom.js",
+      "fileHash": "4f14efec",
+      "needsInterop": true
+    },
+    "react-query": {
+      "src": "../../node_modules/react-query/es/index.js",
+      "file": "react-query.js",
+      "fileHash": "8f4d902b",
+      "needsInterop": false
+    },
+    "@chakra-ui/react": {
+      "src": "../../node_modules/@chakra-ui/react/dist/index.mjs",
+      "file": "@chakra-ui_react.js",
+      "fileHash": "f7d8afcf",
+      "needsInterop": false
+    },
+    "axios": {
+      "src": "../../node_modules/axios/index.js",
+      "file": "axios.js",
+      "fileHash": "7a118c18",
+      "needsInterop": false
+    },
+    "zustand": {
+      "src": "../../node_modules/zustand/esm/index.mjs",
+      "file": "zustand.js",
+      "fileHash": "eae3d43f",
+      "needsInterop": false
+    },
+    "@fortawesome/react-fontawesome": {
+      "src": "../../node_modules/@fortawesome/react-fontawesome/index.es.js",
+      "file": "@fortawesome_react-fontawesome.js",
+      "fileHash": "a4a768f8",
+      "needsInterop": false
+    },
+    "@fortawesome/free-solid-svg-icons": {
+      "src": "../../node_modules/@fortawesome/free-solid-svg-icons/index.mjs",
+      "file": "@fortawesome_free-solid-svg-icons.js",
+      "fileHash": "51cbc9c1",
+      "needsInterop": false
+    },
+    "rc-slider": {
+      "src": "../../node_modules/rc-slider/es/index.js",
+      "file": "rc-slider.js",
+      "fileHash": "cf21a1e1",
+      "needsInterop": false
+    },
+    "react-paginate": {
+      "src": "../../node_modules/react-paginate/dist/react-paginate.js",
+      "file": "react-paginate.js",
+      "fileHash": "6523eac1",
+      "needsInterop": true
+    }
+  },
+  "chunks": {
+    "chunk-GKZHCD46": {
+      "file": "chunk-GKZHCD46.js"
+    },
+    "chunk-DCSRLRGN": {
+      "file": "chunk-DCSRLRGN.js"
+    },
+    "chunk-WZQPIKTG": {
+      "file": "chunk-WZQPIKTG.js"
+    },
+    "chunk-HAGYMXC5": {
+      "file": "chunk-HAGYMXC5.js"
+    },
+    "chunk-PQEZCWQY": {
+      "file": "chunk-PQEZCWQY.js"
+    },
+    "chunk-FLAVOKRJ": {
+      "file": "chunk-FLAVOKRJ.js"
+    },
+    "chunk-AC2VUBZ6": {
+      "file": "chunk-AC2VUBZ6.js"
+    }
+  }
+}

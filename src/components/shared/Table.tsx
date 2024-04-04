@@ -195,7 +195,7 @@ export const MainTable = ({ data, isLoading, error }: MainTableProps) => {
                   {/* If any locations have a space in them, add a hyphen to properly link to website location pages */}
                   <a
                     target="_blank"
-                    href={`https://battlefieldequipment.ca/locations/${
+                    href={`#/${
                       equipment.city.indexOf(" ")
                         ? equipment.city.replace(/\s/g, "-")
                         : equipment.city

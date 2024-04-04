@@ -1,4 +1,4 @@
-import { useMemo, useEffect } from "react";
+import { useMemo, useEffect, useState } from "react";
 import useFilterStore from "../../store";
 import { Data, Equipment } from "../../types/types";
 import {
@@ -50,6 +50,30 @@ export const MainTable = ({ data, isLoading, error }: MainTableProps) => {
     setCurrentPage,
     priceRangeFilter,
   } = useFilterStore();
+
+  // Sorting logic
+  const rawData = data.map((group) => group.equipments).flat();
+  const [tableData, setTableData] = useState(rawData);
+  const [order, setOrder] = useState("ASC");
+
+  const handleHeaderClick = (col) => {
+    if (order === "ASC") {
+      const sorted = [...tableData].sort((a, b) =>
+        a[col].toLowerCase() > b[col].toLowerCase() ? 1 : -1
+      );
+      setTableData(sorted);
+      setOrder("DSC");
+      console.log("sorted", sorted);
+    }
+    if (order === "DSC") {
+      const sorted = [...tableData].sort((a, b) =>
+        a[col].toLowerCase() < b[col].toLowerCase() ? 1 : -1
+      );
+      setTableData(sorted);
+      setOrder("ASC");
+      console.log("sorted", sorted);
+    }
+  };
 
   // Create search filter
   const filteredSearch = (item: any) =>
@@ -116,7 +140,7 @@ export const MainTable = ({ data, isLoading, error }: MainTableProps) => {
     return <p>{t("matches")}</p>;
   }
 
-  console.log("filtered data", filteredData);
+  console.log("filtered table data", filteredData);
   console.log("price range filter", priceRangeFilter);
 
   return (
@@ -125,18 +149,36 @@ export const MainTable = ({ data, isLoading, error }: MainTableProps) => {
         <Table variant="simple">
           <Thead>
             <Tr>
-              <Th>{t("manu")}</Th>
-              <Th>{t("model")}</Th>
-              <Th>{t("desc")}</Th>
-              <Th>{t("serial")}</Th>
-              <Th>{t("prov")}</Th>
-              <Th>{t("city")}</Th>
-              <Th className="align-right">{t("regPrice")}</Th>
-              <Th className="align-right sale-header">{t("salePrice")}</Th>
+              <Th onClick={() => handleHeaderClick("manufacturer")}>
+                {t("manu")}
+              </Th>
+              <Th onClick={() => handleHeaderClick("model")}>{t("model")}</Th>
+              <Th
+                onClick={() => handleHeaderClick("product-family-display-name")}
+              >
+                {t("desc")}
+              </Th>
+              <Th onClick={() => handleHeaderClick("serial-number")}>
+                {t("serial")}
+              </Th>
+              <Th onClick={() => handleHeaderClick("state")}>{t("prov")}</Th>
+              <Th onClick={() => handleHeaderClick("city")}>{t("city")}</Th>
+              <Th
+                onClick={() => handleHeaderClick("regular-price")}
+                className="align-right"
+              >
+                {t("regPrice")}
+              </Th>
+              <Th
+                onClick={() => handleHeaderClick("price")}
+                className="align-right sale-header"
+              >
+                {t("salePrice")}
+              </Th>
             </Tr>
           </Thead>
           <Tbody>
-            {currentPageData.map((equipment: Equipment) => (
+            {tableData.map((equipment: Equipment) => (
               <Tr key={equipment.id}>
                 {/* If manufacturer or model has a blank API value, show N/A */}
                 <Td>

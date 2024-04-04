@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import useFilterStore from "../../../store";
 import { Data } from "../../../types/types";
@@ -49,30 +50,27 @@ export const Header = ({ data, isLoading, error }: HeaderProps) => {
     e: React.ChangeEvent<HTMLSelectElement>
   ) => {
     useFilterStore.setState({ provinceDropdownFilter: e.target.value });
-
     // Filter the data based on the selected province
-    const filteredCities = filteredData
-      .filter((item) => item.state === e.target.value)
-      .map((item) => item.city);
+    const filteredCitiesSet = new Set<string>(
+      filteredData
+        .filter((item) => item.state === e.target.value)
+        .map((item) => item.city)
+    );
 
-    // Set the filtered city dropdown options
-    useFilterStore.setState({ cityDropdownFilter: filteredCities[0] || "" });
+    const filteredCities = Array.from(filteredCitiesSet);
+
+    // // Set cityDropdownFilter only if it hasn't been set before
+    // if (!useFilterStore.getState().cityDropdownFilter) {
+    //   useFilterStore.setState({ cityDropdownFilter: "" });
+    // }
+
+    useFilterStore.setState({ cityDropdownFilter: "" });
   };
 
   const handleDropdownFilterCity = (
     e: React.ChangeEvent<HTMLSelectElement>
   ) => {
     useFilterStore.setState({ cityDropdownFilter: e.target.value });
-
-    // Filter the data based on the selected city
-    const filteredProvinces = filteredData
-      .filter((item) => item.city === e.target.value)
-      .map((item) => item.state);
-
-    // Set the filtered province dropdown options
-    useFilterStore.setState({
-      provinceDropdownFilter: filteredProvinces[0] || "",
-    });
   };
 
   const handlePriceRangeFilter = (value: number | null | undefined) => {
@@ -112,14 +110,25 @@ export const Header = ({ data, isLoading, error }: HeaderProps) => {
     setSearchParams(new URLSearchParams());
   };
 
+  // On load of /fr, filter to QC upfront
+  useEffect(() => {
+    const url = window.location.href;
+
+    // On load, adjust url to add '?state=QC'
+    if (url.includes("/fr")) {
+      // Set the province dropdown filter state to 'QC'
+      useFilterStore.setState({ provinceDropdownFilter: "QC" });
+    }
+  }, []);
+
   return (
     <>
-      <p className="intro">
+      {/* <p className="intro">
         Small Equipment & Tool Sell-Off only applies to the serial numbers
         indicated. No substitutions, exchanges or returns. F.O.B current
         location. All sales are final. Applicable taxes are not included.
         Pricing and availability are subject to change.
-      </p>
+      </p> */}
       <section className="header-area">
         <Grid
           templateColumns={{
@@ -131,19 +140,29 @@ export const Header = ({ data, isLoading, error }: HeaderProps) => {
         >
           <Search />
           <Dropdown
-            data={data}
+            data={filteredData}
             value={manufacturerDropdownFilter}
             onChange={handleDropdownFilterManufacturer}
             filterType="manufacturer"
           />
           <Dropdown
-            data={data}
+            data={filteredData}
             value={provinceDropdownFilter}
             onChange={handleDropdownFilterProvince}
             filterType="state"
           />
+          {/* // Filter the data for the City dropdown based on whether a Province is selected.
+          // If a Province is selected, only show cities belonging to that Province.
+          // Otherwise, show all cities from the filtered data. */}
+
           <Dropdown
-            data={data}
+            data={
+              provinceDropdownFilter
+                ? filteredData.filter(
+                    (item) => item.state === provinceDropdownFilter
+                  )
+                : filteredData
+            }
             value={cityDropdownFilter}
             onChange={handleDropdownFilterCity}
             filterType="city"

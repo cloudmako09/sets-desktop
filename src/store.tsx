@@ -6,6 +6,7 @@ interface FilterState {
   manufacturerDropdownFilter: string;
   provinceDropdownFilter: string;
   cityDropdownFilter: string;
+  filteredCities: string[];
   currentPage: number;
   priceRangeFilter: number | null;
   clearFilter: string;
@@ -13,6 +14,7 @@ interface FilterState {
   setManufacturerDropdownFilter: (value: string) => void;
   setProvinceDropdownFilter: (value: string) => void;
   setCityDropdownFilter: (value: string) => void;
+  setFilteredCities: (value: string[]) => void;
   setCurrentPage: (page: number) => void;
   setPriceRange: (value: number) => void;
   setClearFilter: (value: string) => void;
@@ -24,6 +26,7 @@ const useFilterStore = create<FilterState>(
     manufacturerDropdownFilter: "",
     provinceDropdownFilter: "",
     cityDropdownFilter: "",
+    filteredCities: [],
     currentPage: 0,
     priceRangeFilter: null,
     clearFilter: "",
@@ -34,6 +37,8 @@ const useFilterStore = create<FilterState>(
       set({ provinceDropdownFilter: value }),
     setCityDropdownFilter: (value: string) =>
       set({ cityDropdownFilter: value }),
+    setFilteredCitiesFilter: (value: string[]) =>
+      set({ filteredCities: value }),
     setCurrentPage: (page: number) => set({ currentPage: page }),
     setPriceRange: (value: number) => set({ priceRangeFilter: value }),
     setClearFilter: (value: string) => set({ clearFilter: value }),

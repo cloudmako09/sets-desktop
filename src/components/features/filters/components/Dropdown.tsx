@@ -11,6 +11,11 @@ interface DropdownProps {
   filterType: string;
 }
 
+interface Data {
+  [key: string]: any; // Index signature to allow any string key
+  // Define other properties with specific types if known
+}
+
 export const Dropdown: React.FC<DropdownProps> = ({
   data,
   onChange,
@@ -19,6 +24,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
 }) => {
   const [searchParams, setSearchParams] = useSearchParams();
 
+  // Ability to make appended URLS shareable
   useEffect(() => {
     // Check if there are existing URL parameters for the current filterType
     const paramValue = searchParams.get(filterType);
@@ -32,7 +38,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
         },
       } as React.ChangeEvent<HTMLSelectElement>);
     }
-  }, [filterType, onChange, searchParams]);
+  }, []);
 
   const handleFilters = (e: any) => {
     // Handle the dropdown change
@@ -47,27 +53,8 @@ export const Dropdown: React.FC<DropdownProps> = ({
     setSearchParams(searchParams);
   };
 
-  // On load of /fr, filter to QC upfront
-  useEffect(() => {
-    const url = window.location.href;
-
-    if (url.includes("/fr") && !url.includes("?state=QC")) {
-      const modifiedFrenchURL = url.replace(
-        "/fr/vente-de-petits-equipments-outils",
-        "/fr/vente-de-petits-equipments-outils?state=QC"
-      );
-      window.location.href = modifiedFrenchURL;
-    }
-  }, []);
-
-  // Map over the parent array as it has nested children arrays with all data containing.
-  // Combine all chidren into one combined array
-  const filteredData = data.map((group) => group.equipments).flat();
-
-  console.log("Dropdown component filtered data", filteredData);
-
   // Filter the data based on the filterType
-  const filteredOptions = filteredData.filter((i) => {
+  const filteredOptions = data.filter((i) => {
     if (filterType === "manufacturer") {
       return i.manufacturer;
     }

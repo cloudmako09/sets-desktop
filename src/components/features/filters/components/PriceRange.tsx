@@ -7,7 +7,7 @@ interface PriceRangeProps {
   value: any;
   min: number;
   max: number;
-  onChange: (value: number | number[]) => void;
+  onChange: any;
 }
 
 export const PriceRange = ({ value, min, max, onChange }: PriceRangeProps) => {

@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "start": "concurrently \"json-server --watch db.json --port 3000\" \"json-server --watch db-fr.json --port  3001\" \"vite\"",
+    "postinstall": "json-server --watch db.json"
   },
   "dependencies": {
     "@chakra-ui/react": "^2.7.0",

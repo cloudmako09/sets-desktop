@@ -9,24 +9,23 @@ import { MainTable } from "./components/shared/Table";
 import "../src/styles/typography.scss";
 import "../src/styles/general.scss";
 import "../src/styles/variables.scss";
-import { Nav } from "./components/shared/nav/nav";
-import { Hero } from "./components/shared/hero/Hero";
-import { Footer } from "./components/shared/footer/footer";
 
 function App() {
   // Fetch the data
-  const { data, isLoading, error } = useQuery("products", fetchProducts);
+  const { data, isLoading, error } = useQuery("products", fetchProducts, {
+    // Set stale/cache time
+    staleTime: 1000 * 60 * 5, 
+    cacheTime: 1000 * 60 * 10,
+    refetchOnWindowFocus: true,
+  });
 
   return (
     <>
       <ChakraProvider>
-        {/* <Nav />
-        <Hero /> */}
         <Container maxW="1200px">
           <Header data={data} isLoading={isLoading} error={error} />
           <MainTable data={data} isLoading={isLoading} error={error} />
         </Container>
-        {/* <Footer /> */}
       </ChakraProvider>
     </>
   );

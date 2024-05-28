@@ -51,30 +51,6 @@ export const MainTable = ({ data, isLoading, error }: MainTableProps) => {
     priceRangeFilter,
   } = useFilterStore();
 
-  // Sorting logic
-  const rawData = data.map((group) => group.equipments).flat();
-  const [tableData, setTableData] = useState(rawData);
-  const [order, setOrder] = useState("ASC");
-
-  const handleHeaderClick = (col) => {
-    if (order === "ASC") {
-      const sorted = [...tableData].sort((a, b) =>
-        a[col].toLowerCase() > b[col].toLowerCase() ? 1 : -1
-      );
-      setTableData(sorted);
-      setOrder("DSC");
-      console.log("sorted", sorted);
-    }
-    if (order === "DSC") {
-      const sorted = [...tableData].sort((a, b) =>
-        a[col].toLowerCase() < b[col].toLowerCase() ? 1 : -1
-      );
-      setTableData(sorted);
-      setOrder("ASC");
-      console.log("sorted", sorted);
-    }
-  };
-
   // Create search filter
   const filteredSearch = (item: any) =>
     item.model.toLowerCase().includes(searchFilter.toLowerCase()) ||
@@ -86,7 +62,22 @@ export const MainTable = ({ data, isLoading, error }: MainTableProps) => {
     item.state.toLowerCase().includes(searchFilter.toLowerCase()) ||
     item.city.toLowerCase().includes(searchFilter.toLowerCase());
 
-  // Search, dropdown and price range filters functionality and working in conjunction
+  // Sorting logic
+
+  const [order, setOrder] = useState<string>("ASC");
+  const [sortColumn, setSortColumn] = useState<string>("ASC");
+
+  // Handle sorting logic on click
+  const handleHeaderClick = (col) => {
+    if (order === "ASC") {
+      setOrder("DSC");
+    } else {
+      setOrder("ASC");
+    }
+    setSortColumn(col);
+  };
+
+  // Search, dropdown, header sorting and price range filters functionality and working in conjunction
   const filteredData = useMemo(() => {
     const filteredEquipment = data
       .map((group) => group.equipments) // Map over the parent array as it has nested children arrays with all data containing
@@ -104,6 +95,36 @@ export const MainTable = ({ data, isLoading, error }: MainTableProps) => {
             priceRangeFilter === undefined ||
             Number(item["price"].text) <= priceRangeFilter)
       );
+
+    // Sorting logic
+    if (sortColumn === "regular-price" || sortColumn === "price") {
+      // Sorting for price columns
+      if (order === "ASC") {
+        filteredEquipment.sort((a, b) => {
+          const priceA = parseFloat(a[sortColumn]?.text);
+          const priceB = parseFloat(b[sortColumn]?.text);
+          return priceA > priceB ? 1 : -1;
+        });
+      } else {
+        filteredEquipment.sort((a, b) => {
+          const priceA = parseFloat(a[sortColumn]?.text);
+          const priceB = parseFloat(b[sortColumn]?.text);
+          return priceA < priceB ? 1 : -1;
+        });
+      }
+    } else {
+      // Sorting for non-price columns
+      if (order === "ASC") {
+        filteredEquipment.sort((a, b) =>
+          a[sortColumn] > b[sortColumn] ? 1 : -1
+        );
+      } else {
+        filteredEquipment.sort((a, b) =>
+          a[sortColumn] < b[sortColumn] ? 1 : -1
+        );
+      }
+    }
+
     return filteredEquipment;
   }, [
     data,
@@ -112,6 +133,8 @@ export const MainTable = ({ data, isLoading, error }: MainTableProps) => {
     provinceDropdownFilter,
     cityDropdownFilter,
     priceRangeFilter,
+    order,
+    sortColumn,
   ]);
   const { t } = useTranslation();
   // Reset the current page when filters change
@@ -151,34 +174,56 @@ export const MainTable = ({ data, isLoading, error }: MainTableProps) => {
             <Tr>
               <Th onClick={() => handleHeaderClick("manufacturer")}>
                 {t("manu")}
+                {order === "ASC" && <span>▲</span>}
+                {order === "DSC" && <span>▼</span>}
               </Th>
-              <Th onClick={() => handleHeaderClick("model")}>{t("model")}</Th>
+              <Th onClick={() => handleHeaderClick("model")}>
+                {t("model")}
+                {order === "ASC" && <span>▲</span>}
+                {order === "DSC" && <span>▼</span>}
+              </Th>
               <Th
                 onClick={() => handleHeaderClick("product-family-display-name")}
               >
                 {t("desc")}
+                {order === "ASC" && <span>▲</span>}
+                {order === "DSC" && <span>▼</span>}
               </Th>
               <Th onClick={() => handleHeaderClick("serial-number")}>
                 {t("serial")}
+                {order === "ASC" && <span>▲</span>}
+                {order === "DSC" && <span>▼</span>}
               </Th>
-              <Th onClick={() => handleHeaderClick("state")}>{t("prov")}</Th>
-              <Th onClick={() => handleHeaderClick("city")}>{t("city")}</Th>
+              <Th onClick={() => handleHeaderClick("state")}>
+                {t("prov")}
+                {order === "ASC" && <span>▲</span>}
+                {order === "DSC" && <span>▼</span>}
+              </Th>
+              <Th onClick={() => handleHeaderClick("city")}>
+                {t("city")}
+                {order === "ASC" && <span>▲</span>}
+                {order === "DSC" && <span>▼</span>}
+              </Th>
               <Th
                 onClick={() => handleHeaderClick("regular-price")}
                 className="align-right"
               >
                 {t("regPrice")}
+                {order === "ASC" && <span>▲</span>}
+                {order === "DSC" && <span>▼</span>}
               </Th>
               <Th
                 onClick={() => handleHeaderClick("price")}
                 className="align-right sale-header"
               >
                 {t("salePrice")}
+                {order === "ASC" && <span>▲</span>}
+                {order === "DSC" && <span>▼</span>}
               </Th>
             </Tr>
           </Thead>
           <Tbody>
-            {tableData.map((equipment: Equipment) => (
+            {currentPageData.map((equipment: Equipment) => (
               <Tr key={equipment.id}>
                 {/* If manufacturer or model has a blank API value, show N/A */}
                 <Td>
@@ -195,7 +240,7 @@ export const MainTable = ({ data, isLoading, error }: MainTableProps) => {
                   {/* If any locations have a space in them, add a hyphen to properly link to website location pages */}
                   <a
                     target="_blank"
-                    href={`#/${
+                    href={`https://battlefieldequipment.ca/locations/${
                       equipment.city.indexOf(" ")
                         ? equipment.city.replace(/\s/g, "-")
                         : equipment.city

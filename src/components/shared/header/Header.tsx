@@ -59,11 +59,6 @@ export const Header = ({ data, isLoading, error }: HeaderProps) => {
 
     const filteredCities = Array.from(filteredCitiesSet);
 
-    // // Set cityDropdownFilter only if it hasn't been set before
-    // if (!useFilterStore.getState().cityDropdownFilter) {
-    //   useFilterStore.setState({ cityDropdownFilter: "" });
-    // }
-
     useFilterStore.setState({ cityDropdownFilter: "" });
   };
 

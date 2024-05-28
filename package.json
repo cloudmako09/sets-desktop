@@ -7,9 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview",
-    "start": "concurrently \"json-server --watch db.json --port 3000\" \"json-server --watch db-fr.json --port  3001\" \"vite\"",
-    "postinstall": "json-server --watch db.json"
+    "preview": "vite preview"
   },
   "dependencies": {
     "@chakra-ui/react": "^2.7.0",
@@ -26,8 +24,6 @@
     "i18next": "^23.6.0",
     "i18next-browser-languagedetector": "^7.1.0",
     "i18next-http-backend": "^2.3.1",
-    "json-schema": "^0.4.0",
-    "json-server": "^0.17.3",
     "rc-slider": "^10.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
